@@ -1,0 +1,6 @@
+.DS_Store
+artifacts/
+cache/
+types/
+node_modules/
+.env

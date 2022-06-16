@@ -1,0 +1,39 @@
+{
+  "name": "chainbridge-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run clean && npm run compile",
+    "test": "npx hardhat test",
+    "clean": "npx hardhat clean",
+    "compile": "npx hardhat compile",
+    "lint": "solhint 'contracts/**/*.sol'",
+    "format": "prettier --write 'contracts/**/*.sol'"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.6.0",
+    "dotenv": "^10.0.0",
+    "ethers": "^5.4.5",
+    "hardhat": "^2.6.1",
+    "web3": "^1.5.2"
+  },
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.2",
+    "@nomiclabs/hardhat-waffle": "^2.0.1",
+    "@typechain/ethers-v5": "^7.0.1",
+    "@typechain/hardhat": "^2.3.0",
+    "@types/node": "^16.7.1",
+    "ethereum-waffle": "^3.4.0",
+    "prettier": "^2.7.1",
+    "prettier-plugin-solidity": "^1.0.0-beta.19",
+    "solhint": "^3.3.7",
+    "ts-generator": "^0.1.1",
+    "ts-node": "^10.2.1",
+    "tsconfig-paths": "^3.11.0",
+    "typechain": "^5.1.2",
+    "typescript": "^4.3.5"
+  }
+}
