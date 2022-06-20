@@ -8,7 +8,6 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
 contract SampleNFT is ERC721, ERC721Burnable, ERC721URIStorage, AccessControl {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
-    bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE");
 
     string public baseURI;
 
@@ -19,7 +18,6 @@ contract SampleNFT is ERC721, ERC721Burnable, ERC721URIStorage, AccessControl {
     ) ERC721(name, symbol) {
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
         _setupRole(MINTER_ROLE, _msgSender());
-        _setupRole(BURNER_ROLE, _msgSender());
 
         _setBaseURI(baseURI);
     }
@@ -36,7 +34,6 @@ contract SampleNFT is ERC721, ERC721Burnable, ERC721URIStorage, AccessControl {
     function burn(uint256 tokenID)
         public
         override(ERC721Burnable)
-        onlyRole(BURNER_ROLE)
     {
         _burn(tokenID);
     }

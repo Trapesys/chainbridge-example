@@ -10,6 +10,7 @@ import {
   DEFAULT_SYMBOL_NAME,
 } from "./tasks/deploy";
 import { grantRole } from "./tasks/grant";
+import { mintERC20, mintERC721 } from "./tasks/mint";
 
 require("dotenv").config();
 
@@ -40,7 +41,7 @@ task("deploy", "deploy contracts")
 task("grant", "Grant a role to user in contract")
   .addParam("contract", "Contract Address")
   .addParam("address", "Account Address")
-  .addParam("role", "Role type [mint, burn]")
+  .addParam("role", "Role type [mint]")
   .setAction(async (args, hre) => {
     const [account] = await hre.ethers.getSigners();
     const { contract, address, role } = args as {
@@ -50,6 +51,45 @@ task("grant", "Grant a role to user in contract")
     };
 
     await grantRole(contract, address, role, account, hre.ethers);
+  });
+
+task("mint", "Mint a new token")
+  .addParam("type", "Token Type [erc20,erc721]")
+  .addParam("contract", "Contract Address")
+  .addParam("address", "Account Address")
+  .addOptionalParam("amount", "Amount of new token for ERC20")
+  .addOptionalParam("id", "ID of new token for ERC721")
+  .addOptionalParam("data", "Metadata (tokenURI) for ERC721")
+  .setAction(async (args, hre) => {
+    const [account] = await hre.ethers.getSigners();
+    const { type, contract, address, amount, id, data } = args as {
+      type: string;
+      contract: string;
+      address: string;
+      amount?: string;
+      id?: string;
+      data?: string;
+    };
+
+    switch (type.toLowerCase()) {
+      case "erc20":
+        if (!amount) {
+          throw new Error(`"amount" is required`);
+        }
+
+        return mintERC20(account, hre.ethers, contract, address, amount);
+      case "erc721":
+        if (!id) {
+          throw new Error(`"id" is required`);
+        }
+        if (!data) {
+          throw new Error(`"data" is required`);
+        }
+
+        return mintERC721(account, hre.ethers, contract, address, id, data);
+      default:
+        throw new Error(`invalid contract type: ${type}`);
+    }
   });
 
 const config: HardhatUserConfig = {
