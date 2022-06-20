@@ -11,6 +11,7 @@ import {
 } from "./tasks/deploy";
 import { grantRole } from "./tasks/grant";
 import { mintERC20, mintERC721 } from "./tasks/mint";
+import { balanceOf } from "./tasks/balance";
 
 require("dotenv").config();
 
@@ -90,6 +91,19 @@ task("mint", "Mint a new token")
       default:
         throw new Error(`invalid contract type: ${type}`);
     }
+  });
+
+task("balance", "Show token balance")
+  .addParam("contract", "Contract Address")
+  .addParam("address", "Account Address")
+  .setAction(async (args, hre) => {
+    const [account] = await hre.ethers.getSigners();
+    const { contract, address } = args as {
+      contract: string;
+      address: string;
+    };
+
+    await balanceOf(account, hre.ethers, contract, address);
   });
 
 const config: HardhatUserConfig = {
