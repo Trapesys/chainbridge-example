@@ -12,6 +12,7 @@ import {
 import { grantRole } from "./tasks/grant";
 import { mintERC20, mintERC721 } from "./tasks/mint";
 import { balanceOf } from "./tasks/balance";
+import { approveERC20, approveERC721 } from "./tasks/approve";
 
 require("dotenv").config();
 
@@ -88,6 +89,40 @@ task("mint", "Mint a new token")
         }
 
         return mintERC721(account, hre.ethers, contract, address, id, data);
+      default:
+        throw new Error(`invalid contract type: ${type}`);
+    }
+  });
+
+task("approve", "Approve token transfer")
+  .addParam("type", "Token Type [erc20,erc721]")
+  .addParam("contract", "Contract Address")
+  .addParam("address", "Spender Address")
+  .addOptionalParam("amount", "Amount of new token for ERC20")
+  .addOptionalParam("id", "ID of new token for ERC721")
+  .setAction(async (args, hre) => {
+    const [account] = await hre.ethers.getSigners();
+    const { type, contract, address, amount, id } = args as {
+      type: string;
+      contract: string;
+      address: string;
+      amount?: string;
+      id?: string;
+    };
+
+    switch (type.toLowerCase()) {
+      case "erc20":
+        if (!amount) {
+          throw new Error(`"amount" is required`);
+        }
+
+        return approveERC20(account, hre.ethers, contract, address, amount);
+      case "erc721":
+        if (!id) {
+          throw new Error(`"id" is required`);
+        }
+
+        return approveERC721(account, hre.ethers, contract, address, id);
       default:
         throw new Error(`invalid contract type: ${type}`);
     }
