@@ -1,14 +1,22 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { utils } from "ethers";
-import { keccak256 } from "ethers/lib/utils";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
-import { AccessControl } from "../types";
+import { SampleToken, AccessControl } from "../types";
 
 const MINT_ROLE_TYPE = "mint" as const;
 type ROLE_TYPES = typeof MINT_ROLE_TYPE;
 
-const nameToRole = {
-  [MINT_ROLE_TYPE]: keccak256(utils.toUtf8Bytes("MINTER_ROLE")),
+const getRole = async (
+  ethers: HardhatRuntimeEnvironment["ethers"],
+  address: string,
+  role: ROLE_TYPES
+): Promise<string> => {
+  const contractFactory = await ethers.getContractFactory("SampleToken");
+  const contract = contractFactory.attach(address) as SampleToken;
+
+  switch (role) {
+    case MINT_ROLE_TYPE:
+      return contract.MINTER_ROLE();
+  }
 };
 
 export const grantRole = async (
@@ -28,9 +36,11 @@ export const grantRole = async (
     signer
   )) as AccessControl;
 
-  const tx = await contract.grantRole(nameToRole[role], accountAddress);
-  const r = await tx.wait();
-  console.log("r", r);
+  const tx = await contract.grantRole(
+    await getRole(ethers, contractAddress, role as any),
+    accountAddress
+  );
+  await tx.wait();
 
   console.log(
     `Granted a role of ${role} to account ${accountAddress} in contract ${contractAddress}`
