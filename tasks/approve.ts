@@ -22,7 +22,7 @@ export const approveERC20 = async (
   const tx = await contract.approve(spender, amount);
   await tx.wait();
 
-  console.log(`ERC20 Token Minted`);
+  console.log(`ERC20 Token Approved`);
   console.log(`ERC20 Token Address: ${contractAddress}`);
   console.log(`Spender: ${spender}`);
   console.log(`Amount: ${amount.toString()}`);
@@ -43,7 +43,7 @@ export const approveERC721 = async (
   const tx = await contract.approve(spender, id);
   await tx.wait();
 
-  console.log(`ERC721 Token Minted`);
+  console.log(`ERC721 Token Approved`);
   console.log(`ERC721 Token Address: ${contractAddress}`);
   console.log(`Spender: ${spender}`);
   console.log(`ID: ${id.toString()}`);

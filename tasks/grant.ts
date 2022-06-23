@@ -42,7 +42,8 @@ export const grantRole = async (
   );
   await tx.wait();
 
-  console.log(
-    `Granted a role of ${role} to account ${accountAddress} in contract ${contractAddress}`
-  );
+  console.log(`Grant a role`);
+  console.log(`Contract: ${contractAddress}`);
+  console.log(`Account: ${accountAddress}`);
+  console.log(`Role: ${role}`);
 };
