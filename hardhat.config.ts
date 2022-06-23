@@ -43,7 +43,7 @@ task("deploy", "deploy contracts")
 task("grant", "Grant a role to user in contract")
   .addParam("contract", "Contract Address")
   .addParam("address", "Account Address")
-  .addParam("role", "Role type [mint]")
+  .addParam("role", "Role type [mint, burn]")
   .setAction(async (args, hre) => {
     const [account] = await hre.ethers.getSigners();
     const { contract, address, role } = args as {
